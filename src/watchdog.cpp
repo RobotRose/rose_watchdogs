@@ -53,7 +53,7 @@ void Watchdog::stop()
     timer_.stop();
 }
 
-bool is_running()
+bool Watchdog::is_running()
 {
     return running_;
 }
