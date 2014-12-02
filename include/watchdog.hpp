@@ -39,7 +39,7 @@ class Watchdog
 
   private:
 
-    void CB_timer_event( const ros::TimerEvent& );
+    void CB_timer_event( const ros::TimerEvent& event );
 
     std::string         name_;
     ros::NodeHandle     n_;

@@ -24,7 +24,7 @@ Watchdog::Watchdog( std::string name, ros::NodeHandle n, double timeout, boost::
     callback_   = callback;
     oneshot_    = oneshot;
 
-    timer_ = n_.createTimer(ros::Duration(timeout_), &this::CB_timer_event, oneshot_);
+    timer_ = n_.createTimer(ros::Duration(timeout_), &Watchdog::CB_timer_event, this, oneshot_);
 }
 
 Watchdog::~Watchdog()
@@ -48,7 +48,7 @@ void Watchdog::stop()
     timer_.stop();
 }
 
-void Watchdog::CB_timer_event( const ros::TimerEvent& )
+void Watchdog::CB_timer_event( const ros::TimerEvent& event )
 {
     ROS_ERROR_NAMED(name_, "Timeout occured.");
     callback_();
