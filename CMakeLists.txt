@@ -5,13 +5,13 @@ find_package(catkin REQUIRED)
 
 catkin_package(
 	INCLUDE_DIRS include
- # 		LIBRARIES 
+ 	LIBRARIES rose_watchdogs
  #  	CATKIN_DEPENDS
  #  	DEPENDS
 )
 
 include_directories(${PROJECT_SOURCE_DIR}/include ${catkin_INCLUDE_DIRS})
 
-add_library(watchdog SHARED src/watchdog.cpp )
+add_library(rose_watchdogs SHARED src/watchdog.cpp)
 
-target_link_libraries(watchdog ${catkin_LIBRARIES})
+target_link_libraries(rose_watchdogs ${catkin_LIBRARIES})

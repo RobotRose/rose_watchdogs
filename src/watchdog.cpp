@@ -15,7 +15,8 @@
 namespace rose
 {
 
-Watchdog::Watchdog( std::string name, ros::NodeHandle n, double timeout, boost::function<void()> callback, bool oneshot )
+Watchdog::Watchdog( std::string name, ros::NodeHandle n, double timeout, boost::function<void()> callback, bool oneshot, bool autostart )
+    : running_(false)
 {
     name_       = name;
     n_          = n;
@@ -23,8 +24,8 @@ Watchdog::Watchdog( std::string name, ros::NodeHandle n, double timeout, boost::
     timeout_    = timeout;
     callback_   = callback;
     oneshot_    = oneshot;
-
-    timer_ = n_.createTimer(ros::Duration(timeout_), &Watchdog::CB_timer_event, this, oneshot_);
+    autostart_  = autostart; 
+    timer_      = n_.createTimer(ros::Duration(timeout_), &Watchdog::CB_timer_event, this, oneshot_, autostart_);
 }
 
 Watchdog::~Watchdog()
@@ -36,16 +37,25 @@ void Watchdog::reset()
 {
     stop();
     start();
+    running_ = true;
 }
 
 void Watchdog::start()
 {
     timer_.start();
+    running_ = true;
+
 }
 
 void Watchdog::stop()
 {
+    running_ = false;
     timer_.stop();
+}
+
+bool is_running()
+{
+    return running_;
 }
 
 void Watchdog::CB_timer_event( const ros::TimerEvent& event )
