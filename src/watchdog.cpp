@@ -10,7 +10,7 @@
 *   Watchdog for (manual) control of the robot.
 * 
 ***********************************************************************************/
-#include "watchdog.hpp"
+#include "rose_watchdogs/watchdog.hpp"
 
 namespace rose
 {
