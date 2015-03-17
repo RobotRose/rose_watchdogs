@@ -15,13 +15,30 @@
 namespace rose
 {
 
-Watchdog::Watchdog( std::string name, ros::NodeHandle n, double timeout, boost::function<void()> callback, bool oneshot, bool autostart )
+Watchdog::Watchdog( std::string name, double timeout, boost::function<void()> callback, bool oneshot, bool autostart )
     : running_(false)
+    , n_(ros::NodeHandle())
+    , name_(name)
 {
-    name_       = name;
-    n_          = n;
-
     timeout_    = timeout;
+    callback_   = callback;
+    oneshot_    = oneshot;
+    autostart_  = autostart; 
+    timer_      = n_.createTimer(ros::Duration(timeout_), &Watchdog::CB_timer_event, this, oneshot_, autostart_);
+}
+
+Watchdog::Watchdog( std::string name, boost::function<void()> callback, bool oneshot, bool autostart )
+    : running_(false)
+    , n_(ros::NodeHandle())
+    , name_(name)
+{
+    // Get a private nodehandle to load the configurable parameters
+    ros::NodeHandle pn = ros::NodeHandle("~");
+
+    // Retrieve the timeout parameter
+    std::string timeout_name = ros::names::append(name_, "timeout");
+    ROS_ASSERT_MSG(pn.getParam(timeout_name, timeout_), "Parameter %s must be specified.", timeout_name.c_str());
+
     callback_   = callback;
     oneshot_    = oneshot;
     autostart_  = autostart; 
