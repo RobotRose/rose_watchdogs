@@ -22,7 +22,28 @@ namespace rose
 class Watchdog
 {
   public:
-    Watchdog( std::string name, ros::NodeHandle n, double timeout, boost::function<void()> callback, bool oneshot = true, bool autostart = false );
+    /**
+     * @brief Constructor of watchdog object.
+     * @details Timeout value must be specified through parameter 'node/watchdog_name/timeout'
+     * 
+     * @param name Name of the watchdog timer
+     * @param timeout Timeout in seconds before callback is called, if no reset is called.
+     * @param callback Callback function to be called when timeout expires.
+     * @param oneshot Specify whether the callback is called once or continually.
+     * @param autostart Specify whether the watchdog timer has to start at creation.
+     */
+    Watchdog( std::string name, boost::function<void()> callback, bool oneshot = true, bool autostart  = false );
+    /**
+     * @brief Constructor of watchdog object.
+     * @details Timeout value must be specified through constructor parameter.
+     * 
+     * @param name Name of the watchdog timer
+     * @param timeout Timeout in seconds before callback is called, if no reset is called.
+     * @param callback Callback function to be called when timeout expires.
+     * @param oneshot Specify whether the callback is called once or continually.
+     * @param autostart Specify whether the watchdog timer has to start at creation.
+     */
+    Watchdog( std::string name, double timeout, boost::function<void()> callback, bool oneshot = true, bool autostart  = false );
     ~Watchdog();
     
     /**
