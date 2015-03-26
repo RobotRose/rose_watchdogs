@@ -32,12 +32,9 @@ Watchdog::Watchdog( std::string name, boost::function<void()> callback, bool one
     , n_(ros::NodeHandle())
     , name_(name)
 {
-    // Get a private nodehandle to load the configurable parameters
-    ros::NodeHandle pn = ros::NodeHandle("~");
-
     // Retrieve the timeout parameter
     std::string timeout_name = ros::names::append(name_, "timeout");
-    ROS_ASSERT_MSG(pn.getParam(timeout_name, timeout_), "Parameter %s must be specified.", timeout_name.c_str());
+    ROS_ASSERT_MSG(n_.getParam(timeout_name, timeout_), "Watchdog timeout parameter '%s' must be specified. Or a timeout value should be provided in the constructor.", timeout_name.c_str());
 
     callback_   = callback;
     oneshot_    = oneshot;
