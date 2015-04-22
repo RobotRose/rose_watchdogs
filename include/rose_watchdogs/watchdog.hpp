@@ -13,6 +13,8 @@
 #include <ros/ros.h>
 #include <string>
 
+#include "std_msgs/Header.h"
+
 #ifndef WATCHDOG_HPP
 #define WATCHDOG_HPP
 
@@ -45,12 +47,12 @@ class Watchdog
      */
     Watchdog( std::string name, double timeout, boost::function<void()> callback, bool oneshot = true, bool autostart  = false );
     ~Watchdog();
-    
     /**
-     * Reset the watchdog. Cancels all pending callbacks and lets the timer forget about the time that has already elapsed.
+     * Reset the watchdog. Checks the timestamp of the message for which the reset is done. If not too old cancels 
+     * all pending callbacks and lets the timer forget about the time that has already elapsed.
      */
-    void reset();
-    
+    bool reset( const std_msgs::Header& header );
+
     /**
      * Start the watchdog and its timer. Does nothing if the watchdog is already started. 
      */
@@ -68,6 +70,11 @@ class Watchdog
     bool is_running();
 
   private:
+     /**
+     * Reset the watchdog. Cancels all pending callbacks and lets the timer forget about the time that has already elapsed.
+     */
+    void reset();
+    
 
     void CB_timer_event( const ros::TimerEvent& event );
 
