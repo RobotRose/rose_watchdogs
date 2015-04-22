@@ -57,6 +57,18 @@ void Watchdog::reset()
     running_ = true;
 }
 
+bool Watchdog::reset( const std_msgs::Header& header )
+{
+    // Only reset the watchdog when a message is not too old
+    if ( ros::Time::now() - ros::Duration(timeout_) < header.stamp )
+    {
+        reset();
+        return true;
+    }
+    else
+        return false;
+}
+
 void Watchdog::start()
 {
     timer_.start();
