@@ -66,7 +66,10 @@ bool Watchdog::reset( const std_msgs::Header& header )
         return true;
     }
     else
+    {
+        ROS_ERROR("Received message is too old. Difference between received message and now: %f (time-out = %f).", (ros::Time::now() - header.stamp).toSec(), timeout_ );
         return false;
+    }
 }
 
 void Watchdog::start()
